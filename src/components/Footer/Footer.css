@@ -1,0 +1,26 @@
+.footer {
+  margin-top: 96px;
+  padding: 40px 0 88px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.footer__brand p {
+  max-width: 42ch;
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.footer__credit {
+  color: var(--text-subtle);
+  font-size: 0.85rem;
+}

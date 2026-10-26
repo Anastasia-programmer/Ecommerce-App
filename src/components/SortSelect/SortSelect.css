@@ -1,0 +1,44 @@
+.sort-select {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-muted);
+  transition: border-color 0.2s ease;
+}
+
+.sort-select:hover,
+.sort-select:focus-within {
+  border-color: var(--border-strong);
+}
+
+.sort-select svg {
+  position: absolute;
+  left: 14px;
+  pointer-events: none;
+}
+
+.sort-select select {
+  height: 100%;
+  padding: 0 36px 0 38px;
+  border: 0;
+  outline: 0;
+  border-radius: inherit;
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a8f80' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 14px center;
+  appearance: none;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sort-select select option {
+  background: var(--surface);
+  color: var(--text);
+}

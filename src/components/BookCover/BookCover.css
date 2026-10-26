@@ -1,0 +1,128 @@
+.book-cover {
+  container-type: inline-size;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 2 / 3;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 3px 8px 8px 3px;
+  background: var(--cover-bg);
+  color: var(--cover-fg);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.08),
+    0 6px 14px -4px rgba(40, 25, 10, 0.35);
+  isolation: isolate;
+}
+
+/* Spine shading on the left edge */
+.book-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.28) 0%,
+    rgba(255, 255, 255, 0.16) 2.4%,
+    rgba(0, 0, 0, 0.1) 4.5%,
+    transparent 8%
+  );
+}
+
+/* Soft light reflection + thin inner border */
+.book-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.2) 0%, transparent 38%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.12) 0%, transparent 30%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.book-cover__art-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.book-cover__art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.book-cover__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5cqw;
+  padding: 8cqw 9cqw 10cqw 12cqw;
+}
+
+.book-cover--top .book-cover__art-wrap {
+  order: 2;
+}
+
+.book-cover--top .book-cover__text {
+  padding: 11cqw 9cqw 6cqw 12cqw;
+}
+
+.book-cover__author {
+  font-family: var(--font-body);
+  font-size: 5.2cqw;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.book-cover__author::before {
+  content: '';
+  display: block;
+  width: 9cqw;
+  height: 0.9cqw;
+  min-height: 1px;
+  margin-bottom: 3.5cqw;
+  background: var(--cover-accent);
+}
+
+.book-cover__title {
+  font-family: var(--font-display);
+  font-size: calc(13cqw * var(--title-scale));
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.book-cover--rtl .book-cover__text {
+  padding-inline: 12cqw 9cqw;
+}
+
+.book-cover--rtl .book-cover__author,
+.book-cover--rtl .book-cover__title {
+  font-family: var(--font-arabic);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.book-cover--rtl .book-cover__title {
+  font-size: 14cqw;
+  line-height: 1.3;
+}
+
+.book-cover--rtl .book-cover__author {
+  font-size: 6.5cqw;
+}
+
+/* Tiny thumbnails (cart): keep only the artwork */
+@container (max-width: 90px) {
+  .book-cover__text {
+    display: none;
+  }
+}

@@ -1,0 +1,40 @@
+.price {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+
+.price__current {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.price__old {
+  color: var(--text-subtle);
+  font-size: 0.85em;
+}
+
+.price__badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.price--md .price__current {
+  font-size: 1.05rem;
+}
+
+.price--lg .price__current {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.price--lg .price__old {
+  font-size: 1rem;
+}

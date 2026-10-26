@@ -1,0 +1,36 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.rating__stars {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.rating__row {
+  display: flex;
+  gap: 1px;
+}
+
+.rating__row--empty {
+  color: var(--surface-3);
+}
+
+.rating__row--full {
+  position: absolute;
+  inset: 0;
+  color: var(--gold);
+  clip-path: inset(0 calc(100% - var(--fill)) 0 0);
+}
+
+.rating__value {
+  font-weight: 600;
+}
+
+.rating__count {
+  color: var(--text-subtle);
+}
