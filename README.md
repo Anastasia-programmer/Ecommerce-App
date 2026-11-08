@@ -9,6 +9,9 @@
 | **Store name** | Maktaba (مكتبة — “bookshop” in Arabic) |
 | **Category** | Books — Algerian and world literature |
 
+> **TD-TP 3 (backend):** the REST API (Node.js, Express, MongoDB, JWT, OAuth 2.0, rate limiting)
+> is in [`server/`](server/). See [server/README.md](server/README.md).
+
 ![Maktaba home page](screenshots/01-home.png)
 
 ---

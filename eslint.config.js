@@ -18,4 +18,9 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  {
+    // Backend (TD-TP 3) runs in Node.js
+    files: ['server/**/*.js'],
+    languageOptions: { globals: globals.node },
+  },
 ])
