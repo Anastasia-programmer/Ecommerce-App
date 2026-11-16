@@ -11,6 +11,9 @@
 
 > **TD-TP 3 (backend):** the REST API (Node.js, Express, MongoDB, JWT, OAuth 2.0, rate limiting)
 > is in [`server/`](server/). See [server/README.md](server/README.md).
+>
+> **TD-TP 4 (full-stack integration):** the React shop now uses that API for its books, for sign-in
+> (JWT) and to add, edit and delete books. See [section 9](#9-td-tp-4--full-stack-integration).
 
 ![Maktaba home page](screenshots/01-home.png)
 
@@ -27,8 +30,9 @@ The visual identity is inspired by Algerian heritage: zellige stars, Moorish arc
 motifs. **Every book cover is drawn in code** (SVG + CSS) by the reusable `<BookCover />`
 component, so the project uses no image files and works offline.
 
-Following the lab scope, there is **no backend, database, authentication or payment**. The
-catalog is static data loaded into the Redux store, and checkout is a demo confirmation.
+In TD-TP 2 the catalog was static data loaded into the Redux store. Since TD-TP 3 it is
+**fetched from the backend API** (`server/`), which stores the books in MongoDB. Checkout is
+still a demo confirmation.
 
 ## 2. Technologies used
 
@@ -51,7 +55,11 @@ Requirements: **Node.js 20.19+ or 22.12+** and npm.
 # 1. Install dependencies
 npm install
 
-# 2. Start the development server
+# 2. Start the backend API (first time: cd server && npm install && cp .env.example .env)
+npm run api
+# → http://localhost:3000
+
+# 3. In a second terminal, start the website
 npm run dev
 # → open http://localhost:5173
 
@@ -68,7 +76,7 @@ src/
 ├── main.jsx                 # Entry point: <Provider store={store}> wraps <App />
 ├── App.jsx                  # Layout, simple navigation, details dialog
 ├── data/
-│   └── products.js          # Static catalog (20 books) + shop constants
+│   └── products.js          # Shop constants (the books come from the API)
 ├── redux/
 │   ├── store.js             # configureStore + localStorage persistence
 │   ├── actionTypes.js       # All action type constants
@@ -130,7 +138,7 @@ theme, basket open/closed, notifications) lives in **Redux**. Data used by one c
 
 ```js
 {
-  products:  { items: [ /* 20 books */ ] },            // static catalog (read-only)
+  products:  { items: [ /* 20 books */ ], status: 'succeeded', error: null }, // loaded from the API
   cart:      { items: [ { id: 'nedjma', quantity: 2 } ] },
   favorites: { ids: [ 'l-etranger', 'memory-in-the-flesh' ] },
   filters:   { query: '', category: 'All', sort: 'featured' },
@@ -214,6 +222,60 @@ click “Add” in <ProductCard>
 | ![Favorites](screenshots/10-favorites.png) Favorites page | ![Mobile](screenshots/12-mobile-catalog.png) Mobile |
 
 More screenshots are in the [`screenshots/`](screenshots) folder.
+
+## 9. TD-TP 4 — Full-stack integration
+
+```
+React frontend (Redux)  ──fetch + JWT──▶  Express REST API (server/)  ──Mongoose──▶  MongoDB
+```
+
+| Task of the lab | Where it is done |
+|---|---|
+| Connect frontend and backend (Fetch API) | `src/api.js`: one `request()` function for every call (JSON body, `Authorization: Bearer <token>`, error messages) |
+| Display products from MongoDB | `fetchProducts()` thunk on start-up → `GET /api/products` → products reducer |
+| Registration and login | **Sign in** page (`src/pages/AccountPage.jsx`) → `POST /api/auth/register` / `login` |
+| JWT authentication | The token is kept in the `auth` reducer and in local storage (forgotten when expired), and sent with every protected request |
+| CRUD from the frontend | **Manage** page (`src/pages/ManagePage.jsx` + `ProductForm`), only for logged-in users → `POST`, `PUT`, `DELETE /api/products` |
+| Loading states and errors | See the table below |
+
+### Authentication flow
+
+1. The user signs in. `login()` (`src/redux/actions/authActions.js`) calls `POST /api/auth/login`.
+2. The API returns `{ token, user }`, and `auth/loginSuccess` stores them. The header shows the
+   user's name and a **Manage** tab.
+3. Creating, editing or deleting a book sends `Authorization: Bearer <token>`.
+4. If the API answers **401** (token invalid or expired), the user is logged out automatically
+   and asked to sign in again.
+5. **Sign out** (`auth/logout`) removes the token from the store and from local storage.
+
+### Error handling
+
+| Situation | What the user sees |
+|---|---|
+| Catalog loading | “Loading the books…” |
+| API not running | “Could not load the books — Cannot reach the server…” + **Try again** button |
+| Wrong email or password (401) | “Invalid email or password” under the form |
+| Email already used (409) | “Email already registered” |
+| Too many login attempts (429) | “Too many login attempts, please try again in 15 minutes” |
+| Invalid product data (400) | The API validation message under the product form |
+| Expired or invalid token (401) | Automatic sign-out + “Your session has expired, please sign in again” |
+| While saving | Buttons disabled, “Saving…” / “Please wait…” |
+
+### Testing the full-stack application
+
+With `npm run api` and `npm run dev` running:
+
+1. The shop shows the 20 books from MongoDB.
+2. **Sign in → Create an account** → you are logged in and taken to **Manage**.
+3. **Add a book** → it appears in the table and in the shop.
+4. Edit its price → the new price is shown everywhere.
+5. Reload the page → you are still logged in, and the book is still there (it is in MongoDB).
+6. Delete it → it disappears from the table, the shop, the basket and the favorites.
+7. Stop the API and reload → the error message and the **Try again** button appear.
+
+| | |
+|---|---|
+| ![Manage page](screenshots/14-manage-add-book.png) Manage page: adding a book | ![Register error](screenshots/15-register-error.png) API error shown in the form (409) |
 
 ---
 

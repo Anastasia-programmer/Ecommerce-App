@@ -1,6 +1,6 @@
 /**
  * Local storage persistence (optional feature).
- * Only the cart, the favorites and the theme are saved — filters and
+ * Only the login (JWT), the cart, the favorites and the theme are saved — filters and
  * open panels are temporary and start fresh on each visit.
  */
 const STORAGE_KEY = 'maktaba:state:v1'

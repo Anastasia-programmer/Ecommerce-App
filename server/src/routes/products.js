@@ -5,7 +5,10 @@ import Product from '../models/Product.js'
 
 const router = Router()
 
-const FIELDS = ['name', 'author', 'description', 'price', 'category', 'imageUrl', 'stock']
+const FIELDS = [
+  'name', 'author', 'description', 'price', 'category', 'imageUrl', 'stock',
+  'oldPrice', 'rating', 'reviews', 'year', 'pages', 'language', 'tag', 'coverTitle', 'coverAuthor', 'cover',
+]
 const NOT_FOUND = { error: 'Product not found' }
 
 // Keeps only the fields a client may set (ignores id, createdAt...)

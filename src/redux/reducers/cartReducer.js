@@ -4,6 +4,8 @@ import {
   INCREASE_QUANTITY,
   DECREASE_QUANTITY,
   CLEAR_CART,
+  FETCH_PRODUCTS_SUCCESS,
+  PRODUCT_DELETED,
 } from '../actionTypes'
 import { MAX_QUANTITY } from '../../data/products'
 
@@ -35,7 +37,9 @@ export default function cartReducer(state = initialState, action) {
       return { ...state, items: [...state.items, { id, quantity: clamp(quantity) }] }
     }
 
+    // A book deleted from the database also leaves the cart.
     case REMOVE_FROM_CART:
+    case PRODUCT_DELETED:
       return { ...state, items: state.items.filter((item) => item.id !== action.payload.id) }
 
     case INCREASE_QUANTITY:
@@ -59,6 +63,12 @@ export default function cartReducer(state = initialState, action) {
 
     case CLEAR_CART:
       return initialState
+
+    // Once the catalog arrives from the API, drop saved books that no longer exist.
+    case FETCH_PRODUCTS_SUCCESS: {
+      const ids = new Set(action.payload.map((product) => product.id))
+      return { ...state, items: state.items.filter((item) => ids.has(item.id)) }
+    }
 
     default:
       return state

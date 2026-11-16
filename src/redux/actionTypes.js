@@ -3,6 +3,18 @@
  * Using constants avoids typos between action creators and reducers.
  */
 
+// Products (loaded from the backend API)
+export const FETCH_PRODUCTS_REQUEST = 'products/fetchRequest'
+export const FETCH_PRODUCTS_SUCCESS = 'products/fetchSuccess'
+export const FETCH_PRODUCTS_FAILURE = 'products/fetchFailure'
+export const PRODUCT_CREATED = 'products/created'
+export const PRODUCT_UPDATED = 'products/updated'
+export const PRODUCT_DELETED = 'products/deleted'
+
+// Authentication (JWT from the backend)
+export const LOGIN_SUCCESS = 'auth/loginSuccess'
+export const LOGOUT = 'auth/logout'
+
 // Cart
 export const ADD_TO_CART = 'cart/addToCart'
 export const REMOVE_FROM_CART = 'cart/removeFromCart'

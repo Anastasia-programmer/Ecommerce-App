@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CartDrawer from './components/CartDrawer/CartDrawer'
 import Footer from './components/Footer/Footer'
 import Header from './components/Header/Header'
 import ProductDetails from './components/ProductDetails/ProductDetails'
 import StateInspector from './components/StateInspector/StateInspector'
 import Toast from './components/Toast/Toast'
+import AccountPage from './pages/AccountPage'
 import FavoritesPage from './pages/FavoritesPage'
+import ManagePage from './pages/ManagePage'
 import ShopPage from './pages/ShopPage'
+import { fetchProducts } from './redux/actions/productActions'
 import { selectIsCartOpen, selectTheme } from './redux/selectors'
 
 /**
@@ -17,11 +20,17 @@ import { selectIsCartOpen, selectTheme } from './redux/selectors'
  * filters, theme, cart drawer, notifications.
  */
 export default function App() {
+  const dispatch = useDispatch()
   const theme = useSelector(selectTheme)
   const isCartOpen = useSelector(selectIsCartOpen)
 
   const [page, setPage] = useState('shop')
   const [selectedProductId, setSelectedProductId] = useState(null)
+
+  // Load the catalog from the backend API once, when the app starts.
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
 
   // Apply the theme stored in Redux to the whole document.
   useEffect(() => {
@@ -45,11 +54,10 @@ export default function App() {
       <Header currentPage={page} onNavigate={navigate} />
 
       <main>
-        {page === 'shop' ? (
-          <ShopPage onOpenDetails={setSelectedProductId} />
-        ) : (
-          <FavoritesPage onOpenDetails={setSelectedProductId} onNavigate={navigate} />
-        )}
+        {page === 'shop' && <ShopPage onOpenDetails={setSelectedProductId} />}
+        {page === 'favorites' && <FavoritesPage onOpenDetails={setSelectedProductId} onNavigate={navigate} />}
+        {page === 'account' && <AccountPage onNavigate={navigate} />}
+        {page === 'manage' && <ManagePage onNavigate={navigate} />}
       </main>
 
       <Footer />

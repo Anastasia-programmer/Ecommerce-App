@@ -4,7 +4,7 @@ import Icon from '../Icon/Icon'
 import Logo from '../Logo/Logo'
 import { setSearchQuery } from '../../redux/actions/filterActions'
 import { openCart, toggleTheme } from '../../redux/actions/uiActions'
-import { selectCartCount, selectFavoritesCount, selectFilters, selectTheme } from '../../redux/selectors'
+import { selectCartCount, selectFavoritesCount, selectFilters, selectTheme, selectUser } from '../../redux/selectors'
 import './Header.css'
 
 const NAV_ITEMS = [
@@ -12,10 +12,13 @@ const NAV_ITEMS = [
   { id: 'favorites', label: 'Favorites', icon: 'heart' },
 ]
 
+// Only shown to logged-in users: creating, editing and deleting books needs a JWT
+const MANAGE_ITEM = { id: 'manage', label: 'Manage', icon: 'edit' }
+
 /**
  * Sticky header.
  * Props: currentPage + onNavigate (simple navigation handled by <App />).
- * Global state: search query, theme, cart and favorites counters.
+ * Global state: search query, theme, cart and favorites counters, logged-in user.
  */
 export default function Header({ currentPage, onNavigate }) {
   const dispatch = useDispatch()
@@ -23,6 +26,8 @@ export default function Header({ currentPage, onNavigate }) {
   const theme = useSelector(selectTheme)
   const cartCount = useSelector(selectCartCount)
   const favoritesCount = useSelector(selectFavoritesCount)
+  const user = useSelector(selectUser)
+  const navItems = user ? [...NAV_ITEMS, MANAGE_ITEM] : NAV_ITEMS
 
   // Local UI state: add a shadow once the page is scrolled.
   const [isScrolled, setIsScrolled] = useState(false)
@@ -61,7 +66,7 @@ export default function Header({ currentPage, onNavigate }) {
         </button>
 
         <nav className="header__nav" aria-label="Main">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <button
               key={item.id}
               type="button"
@@ -112,6 +117,16 @@ export default function Header({ currentPage, onNavigate }) {
             title={theme === 'light' ? 'Dark mode' : 'Light mode'}
           >
             <Icon name={theme === 'light' ? 'moon' : 'sun'} />
+          </button>
+
+          <button
+            type="button"
+            className={`header__account ${currentPage === 'account' ? 'is-active' : ''}`}
+            onClick={() => onNavigate('account')}
+            title={user ? `Signed in as ${user.email}` : 'Sign in or create an account'}
+          >
+            <Icon name="user" size={18} />
+            <span className="header__account-label">{user ? user.name.split(' ')[0] : 'Sign in'}</span>
           </button>
 
           <button type="button" className="header__cart" onClick={() => dispatch(openCart())}>

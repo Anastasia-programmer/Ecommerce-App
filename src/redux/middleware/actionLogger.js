@@ -16,7 +16,8 @@ export const actionLogger = () => (next) => (action) => {
     {
       id: counter,
       type: action.type,
-      payload: action.payload,
+      // A long list (e.g. the books from the API) is summarized to keep the panel readable
+      payload: Array.isArray(action.payload) ? `[${action.payload.length} items]` : action.payload,
       time: new Date().toLocaleTimeString(),
     },
     ...entries,

@@ -9,6 +9,10 @@ import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '../data/products'
 
 // ---- Simple selectors -------------------------------------------------------
 export const selectProducts = (state) => state.products.items
+export const selectProductsStatus = (state) => state.products.status
+export const selectProductsError = (state) => state.products.error
+export const selectUser = (state) => state.auth.user
+export const selectIsLoggedIn = (state) => state.auth.token !== null
 export const selectCartEntries = (state) => state.cart.items
 export const selectFavoriteIds = (state) => state.favorites.ids
 export const selectFilters = (state) => state.filters

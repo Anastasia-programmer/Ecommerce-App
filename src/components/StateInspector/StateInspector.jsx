@@ -39,6 +39,7 @@ export default function StateInspector() {
   const [isOpen, setIsOpen] = useState(false)
   const [tab, setTab] = useState('state')
 
+  const auth = useSelector((state) => state.auth)
   const products = useSelector((state) => state.products)
   const cart = useSelector((state) => state.cart)
   const favorites = useSelector((state) => state.favorites)
@@ -47,7 +48,8 @@ export default function StateInspector() {
   const actions = useSyncExternalStore(subscribeToActionLog, getActionLog)
 
   const state = {
-    products: { items: `[${products.items.length} books]` },
+    auth: { user: auth.user, token: auth.token && `${auth.token.slice(0, 24)}…` },
+    products: { ...products, items: `[${products.items.length} books]` },
     cart,
     favorites,
     filters,
